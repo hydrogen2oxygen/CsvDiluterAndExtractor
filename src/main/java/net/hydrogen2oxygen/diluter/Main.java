@@ -1,5 +1,6 @@
 package net.hydrogen2oxygen.diluter;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -12,15 +13,22 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.io.FileUtils;
 
 public class Main {
 
    public static void main(String[] args) throws Exception {
 
+      if (args.length != 6) {
+         System.err.println("syntax:\n inputFile diluterColumns[commaseparated integers] uniqueFile duplicateFile templateFile extractFile");
+      }
+
       String inputFile = args[0];
       String diluterColumns = args[1];
       String uniqueFile = args[2];
       String duplicateFile = args[3];
+      String templateFile = args[4];
+      String extractFile = args[5];
 
       Reader in = new FileReader(inputFile);
       CSVParser records = CSVFormat.EXCEL.parse(in);
@@ -61,6 +69,8 @@ public class Main {
 
       writeCsv(headerRecord, uniqueRecords, uniqueFile);
       writeCsv(headerRecord, duplicateRecords, duplicateFile);
+
+      String template = FileUtils.readFileToString(new File(templateFile), "UTF-8");
    }
 
    private static Integer[] integerArrayFromStringArray(String[] strIntegers) {
