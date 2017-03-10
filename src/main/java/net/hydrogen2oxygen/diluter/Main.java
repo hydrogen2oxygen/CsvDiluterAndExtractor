@@ -17,6 +17,8 @@ import org.apache.commons.io.FileUtils;
 
 public class Main {
 
+   private static final String UTF_8 = "UTF-8";
+
    public static void main(String[] args) throws Exception {
 
       if (args.length != 6) {
@@ -70,7 +72,21 @@ public class Main {
       writeCsv(headerRecord, uniqueRecords, uniqueFile);
       writeCsv(headerRecord, duplicateRecords, duplicateFile);
 
-      String template = FileUtils.readFileToString(new File(templateFile), "UTF-8");
+      String template = FileUtils.readFileToString(new File(templateFile), UTF_8);
+      StringBuilder extract = new StringBuilder();
+
+      for (CSVRecord record : duplicateRecords) {
+
+         String line = template;
+
+         for (int i = 0; i < record.size(); i++) {
+            line = line.replaceAll("#" + i + "#", record.get(i));
+         }
+
+         extract.append(line + "\n");
+      }
+
+      FileUtils.writeStringToFile(new File(extractFile), extract.toString(), UTF_8);
    }
 
    private static Integer[] integerArrayFromStringArray(String[] strIntegers) {
