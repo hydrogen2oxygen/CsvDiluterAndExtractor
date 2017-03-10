@@ -97,7 +97,8 @@ public class Main {
 
       for (String strInteger : strIntegers) {
 
-         integers[i] = Integer.parseInt(strInteger.trim());
+         // minus one, because the user will input 1 for column 0
+         integers[i] = Integer.parseInt(strInteger.trim()) - 1;
 
          i++;
       }
